@@ -2,34 +2,31 @@
 
 ## Test Task using Laravel
 
-Test task within the Laravel framework usage.
-See description at file [task.md](_workflow/task-en.md).
-See workflow [here](_workflow)
+This is the 2nd version of a test task within the Laravel framework usage. In this version I use additional dependencies (e.g. vue, vite, inertia, tailwindcss).
+
+See the [task description](_workflow/task-en.md), and the [workflow](_workflow).
 
 ## Init
 
 ```bash
-# Install frontend dependencies
-npm install
+# Install dependencies
 
-# Build frontend project
-npm run build
+# For unix systems run bash script
+./init
+
+# For windows systems run cmd script:
+# (or run step-by-step commands from the init file)
+init.cmd
 ```
 
 ## Run
 
 ```bash
-# Create Tables
-./artisan migrate
+# ( ! ) Make sure you run init before starting
 
-# Fill in the DB
-./artisan db:seed --class GenresSeeder
-./artisan db:seed --class MoviesSeeder
-./artisan db:seed --class GenresMoviesSeeder
+# To serve in dev mode type
+composer run dev
 
-# Link public dir
-./artisan storage:link
-
-# Serve
-./artisan serve
+# or
+php artisan serve
 ```
