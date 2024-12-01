@@ -6,30 +6,12 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <!-- Scripts -->
+        @routes
+        @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+        @inertiaHead
     </head>
-
-    <body cz-shortcut-listen="true">
-        <main>
-            <div class="container px-4 py-5" id="featured-3">
-                <h2 class="pb-2 border-bottom">Contents</h2>
-
-                <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
-                    <div class="feature col">
-                        <h3 class="fs-2 text-body-emphasis">Genres</h3>
-                        <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                        <a href="{{ route('genres.index') }}" class="icon-link">See detailed</a>
-                    </div>
-
-                    <div class="feature col">
-                        <h3 class="fs-2 text-body-emphasis">Movies</h3>
-                        <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                        <a href="{{ route('movies.index') }}" class="icon-link">See detailed</a>
-                    </div>
-                </div>
-
-            </div>
-        </main>
+    <body class="font-sans antialiased h-screen">
+        @inertia
     </body>
 </html>
