@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 use App\Models\Movie;
 use App\Models\Genre;
@@ -18,7 +20,7 @@ class MovieController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $isShowUnpublished = $request->query('unpublished', '0') == '1';
 
@@ -30,8 +32,14 @@ class MovieController extends Controller
 
         $statuses = Movie::getStatuses();
 
-        return view('movies.index', compact('movies', 'statuses', 'isShowUnpublished'))
-            ->with('i', ($request->input('page', 1) - 1) * $movies->perPage());
+        return Inertia::render('Movies/Index', [
+            'movies' => $movies,
+            'statuses' => $statuses,
+            'i' => ($request->input('page', 1) - 1) * $movies->perPage(),
+        ]);
+
+        // return view('movies.index', compact('movies', 'statuses', 'isShowUnpublished'))
+        //     ->with('i', ($request->input('page', 1) - 1) * $movies->perPage());
     }
 
     /**
@@ -65,9 +73,13 @@ class MovieController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Movie $movie): View
+    public function show(Movie $movie): Response
     {
-        return view('movies.show', compact('movie'));
+        return Inertia::render('Movies/Show', [
+            'movie' => $movie,
+            'movieGenres' => $movie->genres,
+            'genres' => Genre::All(),
+        ]);
     }
 
     /**

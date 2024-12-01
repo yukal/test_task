@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 use App\Models\Genre;
 use App\Http\Requests\GenreStoreRequest;
@@ -15,12 +17,16 @@ class GenreController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): Response
     {
         $genres = Genre::paginate(10);
+        $i = ($request->input('page', 1) - 1) * $genres->perPage();
 
-        return view('genres.index', compact('genres'))
-            ->with('i', (request()->input('page', 1) - 1) * $genres->perPage());
+        // dd($genres);
+        return Inertia::render('Genres/Index', [
+            'genres' => $genres,
+            'i' => ($request->input('page', 1) - 1) * $genres->perPage(),
+        ]);
     }
 
     /**
@@ -45,9 +51,12 @@ class GenreController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Genre $genre): View
+    public function show(Genre $genre): Response
     {
-        return view('genres.show', compact('genre'));
+        return Inertia::render('Genres/Show', [
+            'genre' => $genre,
+            'movies' => $genre->movies,
+        ]);
     }
 
     /**
