@@ -1,7 +1,6 @@
 <script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
 import { inject, ref, onMounted } from 'vue';
-import axios from 'axios';
 
 import Pagination from '@/Pagination.vue';
 import Breadcrumbs from '@/Components/Breadcrumbs.vue';
@@ -33,13 +32,8 @@ var genreToUpdate = ref({
 async function destroyGenre(genreID) {
     var response;
 
-    // console.log(props.genres);
-    // console.log(route('api.v1.genres.destroy', genreID));
-    //
-
     try {
         response = await axios.delete(route('api.v1.genres.destroy', genreID));
-        // response = await axios.delete('/api/v1/genres/'+ genreID);
 
         if (response.status > 199 && response.status < 300) {
             router.reload({ only: ['genres'] });
@@ -173,10 +167,6 @@ onMounted(async () => {
                                             </svg>
                                             Edit
                                         </button>
-
-                                        <!-- TODO: add csrf -->
-                                        <!-- @csrf -->
-                                        <!-- @method('DELETE') -->
 
                                         <button type="button" @click="destroyGenre(genre.id)"
                                             class="inline-flex items-center gap-x-1 ml-2 text-slate-500 hover:text-black focus:relative">
