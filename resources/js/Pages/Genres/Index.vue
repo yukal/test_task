@@ -1,7 +1,6 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { inject, ref, onMounted } from 'vue';
-// import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 import Pagination from '@/Pagination.vue';
@@ -14,8 +13,6 @@ import Table from '@/Components/Table.vue';
 import Dialog from '@/Components/Dialog.vue';
 
 var route = inject('route');
-// var router = useRouter();
-
 var props = defineProps({
     genres: {
         type: Object,
@@ -45,10 +42,7 @@ async function destroyGenre(genreID) {
         // response = await axios.delete('/api/v1/genres/'+ genreID);
 
         if (response.status > 199 && response.status < 300) {
-            props.genres.data = props.genres.data.filter(
-                (item) => item.id !== genreID);
-
-            props.genres.total--;
+            router.reload({ only: ['genres'] });
         }
 
     } catch(err) {
@@ -63,11 +57,7 @@ async function createGenre(name) {
         response = await axios.post(route('api.v1.genres.store'), { name });
 
         if (response.status > 199 && response.status < 300) {
-            location.reload();
-
-            // TODO: make available vue-router
-            // properly refresh page (not reloading the app)
-            // router.go();
+            router.reload({ only: ['genres'] });
         }
 
     } catch(err) {
@@ -84,11 +74,7 @@ async function updateGenre(genre, name) {
         response = await axios.put(route('api.v1.genres.update', genre.id), { name });
 
         if (response.status == 200) {
-            location.reload();
-
-            // TODO: make available vue-router
-            // properly refresh page (not reloading the app)
-            // router.go();
+            router.reload({ only: ['genres'] });
         }
 
     } catch(err) {
@@ -163,7 +149,7 @@ function onShowModalUpdateGenre(genre) {
                 <template #content>
                     <Table :total="genres.total" :heading="['No', 'ID', 'Genre', 'Action']">
                         <template #rows>
-                            <tr v-for="genre, n of genres.data" :key="genres.data.id" :id="`row-genre-${genre.id}`" class="bg-white hover:bg-gray-50 text-sm">
+                            <tr v-for="genre, n of genres.data" :key="genres.data.id" class="bg-white hover:bg-gray-50 text-sm">
                                 <td class="size-px whitespace-nowrap">
                                     <span class="block px-6 py-2 font-mono text-slate-600">{{ i+n+1 }}</span>
                                 </td>
@@ -231,16 +217,16 @@ function onShowModalUpdateGenre(genre) {
             <div class="space-y-3">
                 <!-- Floating Input -->
                 <div class="relative">
-                    <input type="text" id="input-movie-name" v-model="genreName"
+                    <input type="text" id="input-genre-name" v-model="genreName"
                         class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none
                         focus:pt-6
                         focus:pb-2
                         [&:not(:placeholder-shown)]:pt-6
                         [&:not(:placeholder-shown)]:pb-2
                         autofill:pt-6
-                        autofill:pb-2" placeholder="Scary Movie">
+                        autofill:pb-2" placeholder="Scary Genre">
 
-                    <label for="input-movie-name" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent  origin-[0_0] peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                    <label for="input-genre-name" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent  origin-[0_0] peer-disabled:opacity-50 peer-disabled:pointer-events-none
                         peer-focus:scale-90
                         peer-focus:translate-x-0.5
                         peer-focus:-translate-y-1.5
@@ -248,7 +234,7 @@ function onShowModalUpdateGenre(genre) {
                         peer-[:not(:placeholder-shown)]:scale-90
                         peer-[:not(:placeholder-shown)]:translate-x-0.5
                         peer-[:not(:placeholder-shown)]:-translate-y-1.5
-                        peer-[:not(:placeholder-shown)]:text-gray-500">movie name</label>
+                        peer-[:not(:placeholder-shown)]:text-gray-500">genre name</label>
                 </div>
                 <!-- End Floating Input -->
             </div>
@@ -268,16 +254,16 @@ function onShowModalUpdateGenre(genre) {
             <div class="space-y-3">
                 <!-- Floating Input -->
                 <div class="relative">
-                    <input type="text" id="input-movie-name" v-model="genreName"
+                    <input type="text" id="input-genre-name" v-model="genreName"
                         class="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none
                         focus:pt-6
                         focus:pb-2
                         [&:not(:placeholder-shown)]:pt-6
                         [&:not(:placeholder-shown)]:pb-2
                         autofill:pt-6
-                        autofill:pb-2" placeholder="Scary Movie">
+                        autofill:pb-2" placeholder="Scary Genre">
 
-                    <label for="input-movie-name" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent  origin-[0_0] peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                    <label for="input-genre-name" class="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent  origin-[0_0] peer-disabled:opacity-50 peer-disabled:pointer-events-none
                         peer-focus:scale-90
                         peer-focus:translate-x-0.5
                         peer-focus:-translate-y-1.5
@@ -285,7 +271,7 @@ function onShowModalUpdateGenre(genre) {
                         peer-[:not(:placeholder-shown)]:scale-90
                         peer-[:not(:placeholder-shown)]:translate-x-0.5
                         peer-[:not(:placeholder-shown)]:-translate-y-1.5
-                        peer-[:not(:placeholder-shown)]:text-gray-500">movie name</label>
+                        peer-[:not(:placeholder-shown)]:text-gray-500">genre name</label>
                 </div>
                 <!-- End Floating Input -->
             </div>
