@@ -96,9 +96,10 @@ function onShowModalUpdateGenre(genre) {
     HSOverlay.open('#modal-update-genre');
 }
 
-// onMounted(async () => {
-//     console.log('loaded');
-// });
+onMounted(async () => {
+    // console.log('page::onMounted');
+    window.HSStaticMethods.autoInit();
+});
 </script>
 
 <template>
